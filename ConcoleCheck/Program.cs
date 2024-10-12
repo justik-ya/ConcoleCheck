@@ -4,146 +4,55 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-
-class Board
+namespace ConcoleCheck
 {
-    protected const int boardSize = 8;
-    protected char[,] checkersBoard = new char[boardSize, boardSize];
-
-    public void InitializeBoard()
+    internal class Program
     {
-        for (int row = 0; row < boardSize; row++)
+        static void Main(string[] args)
         {
-            for (int col = 0; col < boardSize; col++)
-            {
-                checkersBoard[row, col] = (row + col) % 2 == 0 ? '#' : ' ';
-            }
-        }
-    }
+            Rules rules = new Rules();
+            Checker checker = new Checker();
+            checker.InitializeBoard();
+            checker.PlaceCheckers();
 
-    public void DisplayBoard()
-    {
-        char symb = 'A';
-        Console.WriteLine("   1  2  3  4  5  6  7  8");
-        Console.WriteLine("  +-----------------------+");
-        for (int row = 0; row < boardSize; row++)
-        {
-            Console.Write(Convert.ToChar(symb + row) + " |");
-            for (int col = 0; col < boardSize; col++)
+            while (true)
             {
-                Console.Write(checkersBoard[row, col] + " |");
-            }
-            Console.WriteLine();
-            Console.WriteLine("  +-----------------------+");
-        }
-    }
-}
+                Console.Clear();
+                Console.WriteLine("Как играть:\n O - белые шашки\n @ - черные шашки\n");
+                checker.DisplayBoard();
+                rules.DisplayCapturedCount();
+                Console.WriteLine($"Ход: {rules.GetCurrentPlayer()}");
 
-class Checker : Board
-{
-    public void PlaceCheckers()
-    {
-        for (int row = 0; row < 3; row++)
-        {
-            for (int col = 0; col < boardSize; col++)
-            {
-                if (checkersBoard[row, col] == '#')
+                Console.WriteLine("Введите координаты шашки для перемещения (например: A3 B4): ");
+                string input = Console.ReadLine();
+
+                if (string.IsNullOrWhiteSpace(input))
+                    break;
+
+                var parts = input.Split(' ');
+                if (parts.Length != 2)
                 {
-                    checkersBoard[row, col] = '@';
+                    Console.WriteLine("Неверный формат ввода. Попробуйте снова.");
+                    continue;
                 }
-            }
-        }
 
-        for (int row = 5; row < 8; row++)
-        {
-            for (int col = 0; col < boardSize; col++)
-            {
-                if (checkersBoard[row, col] == '#')
+                var start = parts[0];
+                var end = parts[1];
+
+                int startCol = int.Parse(start[1].ToString()) - 1;
+                int startRow = start[0] - 'A';
+                int endCol = int.Parse(end[1].ToString()) - 1;
+                int endRow = end[0] - 'A';
+
+                if (!rules.MoveChecker(startRow, startCol, endRow, endCol))
                 {
-                    checkersBoard[row, col] = 'O';
+                    Console.WriteLine("Некорректный ход. Попробуйте снова.");
+                    Console.ReadKey();
                 }
             }
         }
     }
 
-    public bool MoveChecker(int startRow, int startCol, int endRow, int endCol)
-    {
-        // Проверка на корректность хода
-        if (IsValidMove(startRow, startCol, endRow, endCol))
-        {
-            // Перемещение шашки
-            checkersBoard[endRow, endCol] = checkersBoard[startRow, startCol];
-            checkersBoard[startRow, startCol] = '#'; // Убираем шашку с начальной позиции
-            return true;
-        }
-        return false;
-    }
-
-    private bool IsValidMove(int startRow, int startCol, int endRow, int endCol)
-    {
-
-        // Проверка на границы доски
-        if (endRow < 0 || endRow >= boardSize || endCol < 0 || endCol >= boardSize)
-            return false;
-
-        // Проверка на возможность перемещения
-        if (checkersBoard[endRow, endCol] != '#')
-            return false;
-
-        // Проверка на правильность направления и расстояния
-        int direction = checkersBoard[startRow, startCol] == '@' ? 1 : -1;
-        if ((endRow - startRow == direction) && Math.Abs(endCol - startCol) == 1)
-            return true;
-
-        return false;
-    }
-}
-
-class Game
-{
-    private Checker checker;
-
-    public Game()
-    {
-        checker = new Checker();
-        checker.InitializeBoard();
-        checker.PlaceCheckers();
-    }
-
-    public void Start()
-    {
-        while (true)
-        {
-            Console.Clear();
-            checker.DisplayBoard();
-
-            Console.WriteLine("Введите начальную позицию (например, 'A1'): ");
-            string startInput = Console.ReadLine();
-            int startCol = Convert.ToInt32(startInput[1].ToString()) - 1;
-            int startRow = startInput[0] - 'A';
-
-            Console.WriteLine("Введите конечную позицию (например, 'B2'): ");
-            string endInput = Console.ReadLine();
-            int endCol = Convert.ToInt32(endInput[1].ToString()) - 1;
-            int endRow = endInput[0] - 'A';
-
-            if (!checker.MoveChecker(startRow, startCol, endRow, endCol))
-            {
-                Console.WriteLine("Некорректный ход. Попробуйте снова.");
-                Console.ReadKey();
-            }
-        }
-    }
-
-
-
-class Program
-{
-    static void Main()
-    {
-        Game game = new Game();
-        game.Start();
-    }
 }
 
 
