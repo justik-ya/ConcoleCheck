@@ -6,12 +6,50 @@ using System.Threading.Tasks;
 
 namespace ConcoleCheck
 {
-    class Program
+    internal class Program
     {
-        static void Main()
+        static void Main(string[] args)
         {
-            Game game = new Game();
-            game.Start();
+            Rules rules = new Rules();
+            Checker checker = new Checker();
+            checker.InitializeBoard();
+            checker.PlaceCheckers();
+
+            while (true)
+            {
+                Console.Clear();
+                Console.WriteLine("Как играть:\n O - белые шашки\n @ - черные шашки\n");
+                checker.DisplayBoard();
+                rules.DisplayCapturedCount();
+                Console.WriteLine($"Ход: {rules.GetCurrentPlayer()}");
+
+                Console.WriteLine("Введите координаты шашки для перемещения (например: A3 B4): ");
+                string input = Console.ReadLine();
+
+                if (string.IsNullOrWhiteSpace(input))
+                    break;
+
+                var parts = input.Split(' ');
+                if (parts.Length != 2)
+                {
+                    Console.WriteLine("Неверный формат ввода. Попробуйте снова.");
+                    continue;
+                }
+
+                var start = parts[0];
+                var end = parts[1];
+
+                int startCol = int.Parse(start[1].ToString()) - 1;
+                int startRow = start[0] - 'A';
+                int endCol = int.Parse(end[1].ToString()) - 1;
+                int endRow = end[0] - 'A';
+
+                if (!rules.MoveChecker(startRow, startCol, endRow, endCol))
+                {
+                    Console.WriteLine("Некорректный ход. Попробуйте снова.");
+                    Console.ReadKey();
+                }
+            }
         }
     }
 
