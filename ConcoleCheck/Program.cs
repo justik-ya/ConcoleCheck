@@ -14,17 +14,24 @@ namespace ConcoleCheck
             Checker checker = new Checker();
             checker.InitializeBoard();
             checker.PlaceCheckers();
+            bool isGameTrue = true;
 
-            while (true)
+            while (isGameTrue)
             {
                 Console.Clear();
-                Console.WriteLine("Как играть:\n O - белые шашки\n @ - черные шашки\n");
+                Console.WriteLine("Как играть:\n O - белые шашки\n @ - черные шашки\n Введите -1 если хотите закончить игру \n");
                 checker.DisplayBoard();
                 rules.DisplayCapturedCount();
                 Console.WriteLine($"Ход: {rules.GetCurrentPlayer()}");
 
                 Console.WriteLine("Введите координаты шашки для перемещения (например: A3 B4): ");
                 string input = Console.ReadLine();
+                int intInput = int.Parse( input );
+
+                if (intInput == -1)
+                {
+                    isGameTrue = false;
+                }
 
                 if (string.IsNullOrWhiteSpace(input))
                     break;
@@ -50,6 +57,7 @@ namespace ConcoleCheck
                     Console.ReadKey();
                 }
             }
+            Console.WriteLine("Игра окончена");
         }
     }
 
