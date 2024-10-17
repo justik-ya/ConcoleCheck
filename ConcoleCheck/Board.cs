@@ -25,12 +25,12 @@ namespace ConcoleCheck
         public void DisplayBoard()
         {
             Rules rules = new Rules();
-            char symb = 'A';
-            Console.WriteLine("   1  2  3  4  5  6  7  8");
+            
+            Console.WriteLine("   a  b  c  d  e  f  g  h");
             Console.WriteLine("  +-----------------------+  ");
             for (int row = 0; row < boardSize; row++)
             {
-                Console.Write(Convert.ToChar(symb + row) + " |");
+                Console.Write((row+1) + " |");
                 for (int col = 0; col < boardSize; col++)
                 {
                     if (checkersBoard[row, col] == '@')
@@ -52,12 +52,12 @@ namespace ConcoleCheck
                         Console.Write(checkersBoard[row, col] + " |");
                     }
                 }
-                Console.Write(" " + Convert.ToChar(symb + row));
+                Console.Write(" " + (row + 1));
                 Console.WriteLine();
                 Console.WriteLine("  +-----------------------+");
             }
 
-            Console.WriteLine("   1  2  3  4  5  6  7  8");
+            Console.WriteLine("   a  b  c  d  e  f  g  h");
         }
     }
 }

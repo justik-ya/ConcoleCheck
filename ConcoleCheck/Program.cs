@@ -26,9 +26,8 @@ namespace ConcoleCheck
 
                 Console.WriteLine("Введите координаты шашки для перемещения (например: A3 B4): ");
                 string input = Console.ReadLine();
-                int intInput = int.Parse( input );
-
-                if (intInput == -1)
+               
+                if (input == "-1")
                 {
                     isGameTrue = false;
                 }
@@ -46,16 +45,16 @@ namespace ConcoleCheck
                 var start = parts[0];
                 var end = parts[1];
 
-                int startCol = int.Parse(start[1].ToString()) - 1;
-                int startRow = start[0] - 'A';
-                int endCol = int.Parse(end[1].ToString()) - 1;
-                int endRow = end[0] - 'A';
+                int startRow = int.Parse(start[0].ToString()) - 1;
+                int startCol = start[1] - 'a';
+                int endRow = int.Parse(end[0].ToString()) - 1;
+                int endCol = end[1] - 'a';
 
                 if (!rules.MoveChecker(startRow, startCol, endRow, endCol))
                 {
                     Console.WriteLine("Некорректный ход. Попробуйте снова.");
                     Console.ReadKey();
-                }
+                }                
             }
             Console.WriteLine("Игра окончена");
         }

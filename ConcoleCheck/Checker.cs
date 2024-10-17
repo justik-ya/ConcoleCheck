@@ -16,7 +16,7 @@ namespace ConcoleCheck
                 {
                     if (checkersBoard[row, col] == '#')
                     {
-                        checkersBoard[row, col] = '@';// Чёрные шашки
+                        checkersBoard[row, col] = '@';
                     }
                 }
             }
@@ -27,7 +27,7 @@ namespace ConcoleCheck
                 {
                     if (checkersBoard[row, col] == '#')
                     {
-                        checkersBoard[row, col] = 'O'; // Белые шашки
+                        checkersBoard[row, col] = 'O';
                     }
                 }
             }
